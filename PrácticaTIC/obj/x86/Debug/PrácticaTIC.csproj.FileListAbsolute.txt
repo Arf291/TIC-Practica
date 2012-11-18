@@ -7,3 +7,5 @@ C:\Users\Alberto\Documents\GitHub\TIC-Practica\PrácticaTIC\bin\Debug\PrácticaT
 C:\Users\Alberto\Documents\GitHub\TIC-Practica\PrácticaTIC\bin\Debug\PrácticaTIC.pdb
 C:\Users\Alberto\Documents\GitHub\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.exe
 C:\Users\Alberto\Documents\GitHub\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.pdb
+C:\Users\fran\Desktop\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.exe
+C:\Users\fran\Desktop\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.pdb
