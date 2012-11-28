@@ -9,3 +9,12 @@ C:\Users\Alberto\Documents\GitHub\TIC-Practica\PrácticaTIC\obj\x86\Debug\Práct
 C:\Users\Alberto\Documents\GitHub\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.pdb
 C:\Users\fran\Desktop\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.exe
 C:\Users\fran\Desktop\TIC-Practica\PrácticaTIC\obj\x86\Debug\PrácticaTIC.pdb
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.exe
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.pdb
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\bin\Debug\PrácticaTIC.exe
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\bin\Debug\PrácticaTIC.pdb
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.Compressor.resources
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.Properties.Resources.resources
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\GenerateResource.write.1.tlog
