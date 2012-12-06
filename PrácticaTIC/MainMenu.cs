@@ -18,6 +18,7 @@ namespace PrácticaTIC
 
         private void btSelec_Click(object sender, EventArgs e)
         {
+            
             selectFile();
         }
 
@@ -62,5 +63,14 @@ namespace PrácticaTIC
             if (MessageBox.Show("¿Seguro que deseas salir?", "Confirmación de salida", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
                 e.Cancel = true;
         }
+
+        private void btAction_Click(object sender, EventArgs e)
+        {
+            Huffman hu = new Huffman();
+            hu.cons_Arbol("aaaappkhuppm");
+            lbName.Text = hu.escribir();
+        }
+
+
     }
 }

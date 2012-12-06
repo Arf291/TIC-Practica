@@ -44,22 +44,24 @@
             // 
             // btSelec
             // 
-            this.btSelec.Location = new System.Drawing.Point(66, 58);
+            this.btSelec.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btSelec.Location = new System.Drawing.Point(157, 103);
             this.btSelec.Name = "btSelec";
             this.btSelec.Size = new System.Drawing.Size(109, 23);
             this.btSelec.TabIndex = 0;
             this.btSelec.Text = "Seleccionar archivo";
-            this.btSelec.UseVisualStyleBackColor = true;
+            this.btSelec.UseVisualStyleBackColor = false;
             this.btSelec.Click += new System.EventHandler(this.btSelec_Click);
             // 
             // btAction
             // 
-            this.btAction.Location = new System.Drawing.Point(66, 132);
+            this.btAction.Location = new System.Drawing.Point(157, 164);
             this.btAction.Name = "btAction";
             this.btAction.Size = new System.Drawing.Size(109, 23);
             this.btAction.TabIndex = 1;
             this.btAction.UseVisualStyleBackColor = true;
             this.btAction.Visible = false;
+            this.btAction.Click += new System.EventHandler(this.btAction_Click);
             // 
             // openFileDialog1
             // 
@@ -68,7 +70,7 @@
             // lbName
             // 
             this.lbName.AutoSize = true;
-            this.lbName.Location = new System.Drawing.Point(74, 103);
+            this.lbName.Location = new System.Drawing.Point(154, 137);
             this.lbName.Name = "lbName";
             this.lbName.Size = new System.Drawing.Size(35, 13);
             this.lbName.TabIndex = 2;
@@ -77,6 +79,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.MediumSpringGreen;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
             this.acercaDeToolStripMenuItem});
@@ -127,7 +130,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(414, 436);
             this.Controls.Add(this.lbName);
             this.Controls.Add(this.btAction);

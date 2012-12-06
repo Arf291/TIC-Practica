@@ -18,3 +18,12 @@ C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.
 C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.Properties.Resources.resources
 C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Users\Alberto\Documents\PrácticaTIC\PrácticaTIC\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\TIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.exe
+C:\TIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.pdb
+C:\TIC\PrácticaTIC\bin\Debug\PrácticaTIC.exe
+C:\TIC\PrácticaTIC\bin\Debug\PrácticaTIC.pdb
+C:\TIC\PrácticaTIC\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\TIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.Compressor.resources
+C:\TIC\PrácticaTIC\obj\x86\Debug\PrácticaTIC.Properties.Resources.resources
+C:\TIC\PrácticaTIC\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\TIC\PrácticaTIC\obj\x86\Debug\GenerateResource.write.1.tlog

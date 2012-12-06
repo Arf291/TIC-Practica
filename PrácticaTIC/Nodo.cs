@@ -8,7 +8,7 @@ namespace PrácticaTIC
     class Nodo
     {
         private char simbolo;
-        private int frecuencia;
+        private float frecuencia;
         private Nodo hijoder;
         private Nodo hijoiz;
         public Nodo Hijoder
@@ -33,7 +33,7 @@ namespace PrácticaTIC
                 hijoiz = value;
             }
         }
-        public int Frecuencia
+        public float Frecuencia
         {
             get
             {
@@ -55,6 +55,11 @@ namespace PrácticaTIC
             {
                 simbolo = value;
             }
+        }
+        public Nodo(char sim, float fre)
+        {
+            simbolo = sim;
+            frecuencia = fre;
         }
         public List<bool> Darcodigo(char simbol,List<bool> codigo)
         {
