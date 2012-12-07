@@ -7,7 +7,7 @@ namespace PrácticaTIC
 {
     class Nodo
     {
-        private char simbolo;
+        private byte simbolo;
         private float frecuencia;
         private Nodo hijoder;
         private Nodo hijoiz;
@@ -45,7 +45,7 @@ namespace PrácticaTIC
             }
         }
 
-        public Char Simbolo
+        public Byte Simbolo
         {
             get 
             {
@@ -56,55 +56,12 @@ namespace PrácticaTIC
                 simbolo = value;
             }
         }
-        public Nodo(char sim, float fre)
+        public Nodo(byte sim, float fre)
         {
             simbolo = sim;
             frecuencia = fre;
         }
-        public List<bool> Darcodigo(char simbol,List<bool> codigo)
-        {
-            if (EsHoja())
-            {
-                if (simbol.Equals(this.Simbolo))
-                {
-                    return codigo;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            { 
-                List <bool> iz=new List<bool>();
-                List<bool> der=new List<bool>();
-                if(Hijoiz !=null)
-                {
-                    List<bool> parteiz=new List<bool>();
-                    parteiz.AddRange(codigo);
-                    parteiz.Add(false);
-                    iz=Darcodigo(simbol,parteiz);
-                }
-                 if(Hijoder !=null)
-                {
-                    List<bool> parteder=new List<bool>();
-                    parteder.AddRange(codigo);
-                    parteder.Add(true);
-                    der=Darcodigo(simbol,parteder);
-                }
-                if(iz !=null)
-                {
-                    return iz;
-                }
-                else
-                {
-                    return der;
-                }
 
-            
-            }
-            
-        }
         public bool EsHoja()
         {
             return (this.Hijoiz == null && this.Hijoder == null);

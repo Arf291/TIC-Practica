@@ -6,14 +6,18 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace PrácticaTIC
 {
     public partial class Compressor : Form
     {
+        OpenFileDialog file;
         public Compressor()
         {
+
             InitializeComponent();
+            file= new OpenFileDialog();
         }
 
         private void btSelec_Click(object sender, EventArgs e)
@@ -29,7 +33,6 @@ namespace PrácticaTIC
 
         private void selectFile()
         {
-            OpenFileDialog file = new OpenFileDialog();
             if (file.ShowDialog() == DialogResult.OK)
             {
                 String ext = file.FileName.Split('.')[1];
@@ -66,9 +69,12 @@ namespace PrácticaTIC
 
         private void btAction_Click(object sender, EventArgs e)
         {
+
+            List<byte> b = new List<byte>();
+            b.AddRange(File.ReadAllBytes(file.FileName));
             Huffman hu = new Huffman();
-            hu.cons_Arbol("aaaappkhuppm");
-            lbName.Text = hu.escribir();
+            String textocod = hu.copiarcod(b);
+            System.IO.File.WriteAllText(@"C:\Users\fran\Desktop\WriteText.huf", textocod);
         }
 
 

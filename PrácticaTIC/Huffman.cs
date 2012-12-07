@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace PrácticaTIC
 {
+
     class Huffman
     {
-        public Dictionary<char,int> frecuencias=new Dictionary<char,int>();
+        public Dictionary<byte,int> frecuencias=new Dictionary<byte,int>();
         public List<Nodo> nodos = new List<Nodo>();
+        public Dictionary<byte, List<bool>> cabezera = new Dictionary<byte, List<bool>>();
         public Nodo raiz;
-        public void darFrecuencias(String input)
+        public void darFrecuencias(List<byte> input)
         {
            
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Count; i++)
             {
                 if (!frecuencias.ContainsKey(input[i]))
                 {
@@ -24,14 +27,18 @@ namespace PrácticaTIC
             }
             
         }
-        public void cons_Arbol(String input)
+
+
+        public void cons_Arbol(List<byte> input)
         {
             darFrecuencias(input);
-            float tam=input.Length;
-            foreach (KeyValuePair<char, int> simbolo in frecuencias)
+            float tam = input.Count;
+            foreach (KeyValuePair<byte, int> simbolo in frecuencias)
             {
                 nodos.Add(new Nodo(simbolo.Key, (simbolo.Value / tam)));
             }
+            
+            int tami=nodos.Count;
             //Vamos a organizar y ordenar para combinarlos por sus frecuencias hasta que nos queden dos he ir creando el árbol
              while (nodos.Count > 1)
             {
@@ -43,7 +50,7 @@ namespace PrácticaTIC
                     List<Nodo> par = nodosor.Take(2).ToList<Nodo>();
 
                     // Creamos al padre como combinación
-                    Nodo padre = new Nodo('*', par[0].Frecuencia + par[1].Frecuencia);
+                    Nodo padre = new Nodo(0, par[0].Frecuencia + par[1].Frecuencia);
                         padre.Hijoiz= par[0];
                         padre.Hijoder=par[1];
                    
@@ -54,18 +61,62 @@ namespace PrácticaTIC
                 }
                  
              }
-             raiz = nodos.FirstOrDefault();
+             raiz = nodos[0];
 
         }
+
         //Codificar y descodificar
-        public String escribir()
+        public void Codifica(List<byte> contenido)
         {
-            String fre = "";
-            foreach (Nodo simbolo in nodos)
+            cons_Arbol(contenido);
+            Darcodigo(raiz,new List<bool>());  
+        }
+
+
+        public void Darcodigo(Nodo raiz, List<bool> codigo)
+        {
+            if (raiz.EsHoja())
             {
-               fre+="Valor: " + simbolo.Simbolo + " Frecuencia: " + simbolo.Frecuencia+'\n';
+
+                cabezera.Add(raiz.Simbolo, codigo);
             }
-            return fre;
+            else
+            {
+                if (raiz.Hijoiz != null)
+                {
+                    List<bool> iz = new List<bool>();
+                    iz.AddRange(codigo);
+                    iz.Add(false);
+                    Darcodigo(raiz.Hijoiz,iz);
+                }
+                if (raiz.Hijoder != null)
+                {
+                    List<bool> de = new List<bool>();
+                    de.AddRange(codigo);
+                    de.Add(true);
+                  
+                    Darcodigo(raiz.Hijoder, de);
+                }
+            }
+
+        }
+        public String copiarcod(List<byte> contenido)
+        {
+            String cab = "";
+            Codifica(contenido);
+            foreach (KeyValuePair<byte, List<bool>> simbolos in cabezera)
+            {
+                cab +=Convert.ToChar(simbolos.Key)+ ":";
+                for (int i = 0; i < simbolos.Value.Count; i++)
+                {
+                    cab += (simbolos.Value[i]? 1 : 0) + "";
+                }
+                cab += " ";
+            }
+
+            cab += '\n';
+           
+            return cab;
             
         }
     }
