@@ -66,10 +66,31 @@ namespace PrácticaTIC
         }
 
         //Codificar y descodificar
-        public void Codifica(List<byte> contenido)
+        public String Codifica(List<byte> contenido)
         {
-            cons_Arbol(contenido);
-            Darcodigo(raiz,new List<bool>());  
+            String texto = "";
+            String  buffer="";
+            
+            foreach (byte b in contenido)
+            {
+                if (cabezera.ContainsKey(b))
+                {
+                    List<bool> cn =cabezera[b];
+                    for(int i=0;i<cn.Count;i++)
+                    {
+                        if (buffer.Length== 8)
+                        {
+
+                           
+                            // aqui declarar un entero y llamar al método a crear y el entero copiarlo al texto
+                            buffer= "";
+                        }
+                        buffer += cn[i];
+                    }
+                    //Si salimos del bucle y el buffer es menor que 8 añadir 0 delante para que sean ocho bits
+                }
+            }
+            return texto;
         }
 
 
@@ -94,7 +115,6 @@ namespace PrácticaTIC
                     List<bool> de = new List<bool>();
                     de.AddRange(codigo);
                     de.Add(true);
-                  
                     Darcodigo(raiz.Hijoder, de);
                 }
             }
@@ -103,8 +123,10 @@ namespace PrácticaTIC
         public String copiarcod(List<byte> contenido)
         {
             String cab = "";
-            Codifica(contenido);
-            foreach (KeyValuePair<byte, List<bool>> simbolos in cabezera)
+            cons_Arbol(contenido);
+            Darcodigo(raiz,new List<bool>());
+            
+           foreach (KeyValuePair<byte, List<bool>> simbolos in cabezera)
             {
                 cab +=Convert.ToChar(simbolos.Key)+ ":";
                 for (int i = 0; i < simbolos.Value.Count; i++)
@@ -113,9 +135,9 @@ namespace PrácticaTIC
                 }
                 cab += " ";
             }
-
             cab += '\n';
-           
+
+            cab += Codifica(contenido);
             return cab;
             
         }
