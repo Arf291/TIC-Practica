@@ -11,6 +11,7 @@ namespace PrácticaTIC
         private float frecuencia;
         private Nodo hijoder;
         private Nodo hijoiz;
+
         public Nodo Hijoder
         {
             get
@@ -62,7 +63,7 @@ namespace PrácticaTIC
             frecuencia = fre;
         }
 
-        public bool EsHoja()
+        public bool esHoja()
         {
             return (this.Hijoiz == null && this.Hijoder == null);
         }

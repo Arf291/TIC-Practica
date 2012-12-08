@@ -70,13 +70,22 @@ namespace PrácticaTIC
         private void btAction_Click(object sender, EventArgs e)
         {
 
-            List<byte> b = new List<byte>();
-            b.AddRange(File.ReadAllBytes(file.FileName));
-            Huffman hu = new Huffman();
-            String textocod = hu.copiarcod(b);
-            System.IO.File.WriteAllText(@"C:\Users\fran\Desktop\WriteText.huf", textocod);
+            List<byte> bytes = new List<byte>();
+            bytes.AddRange(File.ReadAllBytes(file.FileName));
+            Huffman huffman = new Huffman();
+            string textocod = huffman.copiarCodigo(bytes);
+            
+            string[] split = file.FileName.Split('\\');
+            string nombre=split[split.Length-1].Split('.')[0]+".huf";
+            string ruta="";
+
+
+            for(int i=0; i<split.Count()-1; i++)
+            {               
+                ruta+=split[i];
+                ruta += "\\";
+            }
+            System.IO.File.WriteAllText(ruta+nombre, textocod);
         }
-
-
     }
 }

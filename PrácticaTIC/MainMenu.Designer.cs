@@ -44,7 +44,7 @@
             // 
             // btSelec
             // 
-            this.btSelec.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btSelec.BackColor = System.Drawing.Color.Transparent;
             this.btSelec.Location = new System.Drawing.Point(157, 103);
             this.btSelec.Name = "btSelec";
             this.btSelec.Size = new System.Drawing.Size(109, 23);
@@ -55,11 +55,12 @@
             // 
             // btAction
             // 
+            this.btAction.BackColor = System.Drawing.Color.Transparent;
             this.btAction.Location = new System.Drawing.Point(157, 164);
             this.btAction.Name = "btAction";
             this.btAction.Size = new System.Drawing.Size(109, 23);
             this.btAction.TabIndex = 1;
-            this.btAction.UseVisualStyleBackColor = true;
+            this.btAction.UseVisualStyleBackColor = false;
             this.btAction.Visible = false;
             this.btAction.Click += new System.EventHandler(this.btAction_Click);
             // 
@@ -79,7 +80,7 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.MediumSpringGreen;
+            this.menuStrip1.BackColor = System.Drawing.Color.Tan;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
             this.acercaDeToolStripMenuItem});
@@ -102,7 +103,7 @@
             // seleccionarToolStripMenuItem
             // 
             this.seleccionarToolStripMenuItem.Name = "seleccionarToolStripMenuItem";
-            this.seleccionarToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.seleccionarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.seleccionarToolStripMenuItem.Text = "Seleccionar";
             this.seleccionarToolStripMenuItem.Click += new System.EventHandler(this.seleccionarToolStripMenuItem_Click);
             // 
@@ -110,13 +111,13 @@
             // 
             this.tsAction.Enabled = false;
             this.tsAction.Name = "tsAction";
-            this.tsAction.Size = new System.Drawing.Size(134, 22);
+            this.tsAction.Size = new System.Drawing.Size(152, 22);
             this.tsAction.Text = "Comprimir";
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.salirToolStripMenuItem.Text = "Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
@@ -130,7 +131,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.BackColor = System.Drawing.Color.Bisque;
             this.ClientSize = new System.Drawing.Size(414, 436);
             this.Controls.Add(this.lbName);
             this.Controls.Add(this.btAction);

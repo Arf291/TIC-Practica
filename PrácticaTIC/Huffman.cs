@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace PrácticaTIC
 {
@@ -11,8 +12,9 @@ namespace PrácticaTIC
     {
         public Dictionary<byte,int> frecuencias=new Dictionary<byte,int>();
         public List<Nodo> nodos = new List<Nodo>();
-        public Dictionary<byte, List<bool>> cabezera = new Dictionary<byte, List<bool>>();
+        public Dictionary<byte, List<int>> cabezera = new Dictionary<byte, List<int>>();
         public Nodo raiz;
+
         public void darFrecuencias(List<byte> input)
         {
            
@@ -29,7 +31,7 @@ namespace PrácticaTIC
         }
 
 
-        public void cons_Arbol(List<byte> input)
+        public void crearArbol(List<byte> input)
         {
             darFrecuencias(input);
             float tam = input.Count;
@@ -43,11 +45,11 @@ namespace PrácticaTIC
              while (nodos.Count > 1)
             {
                 //Ordenamos ascendentemente cada vez que añadimos uno nuevo reformulado 
-                List<Nodo> nodosor = nodos.OrderBy(nodo => nodo.Frecuencia).ToList<Nodo>();
-                if (nodosor.Count >= 2)
+                List<Nodo> ordenados = nodos.OrderBy(nodo => nodo.Frecuencia).ToList<Nodo>();
+                if (ordenados.Count >= 2)
                 {
                     // Cogemos los dos primeros que serán los dos con menor frecuencia para unirlos
-                    List<Nodo> par = nodosor.Take(2).ToList<Nodo>();
+                    List<Nodo> par = ordenados.Take(2).ToList<Nodo>();
 
                     // Creamos al padre como combinación
                     Nodo padre = new Nodo(0, par[0].Frecuencia + par[1].Frecuencia);
@@ -66,37 +68,46 @@ namespace PrácticaTIC
         }
 
         //Codificar y descodificar
-        public String Codifica(List<byte> contenido)
+        public String codifica(List<byte> contenido)
         {
             String texto = "";
             String  buffer="";
-            
+            String aux = "";
+                                   
             foreach (byte b in contenido)
             {
                 if (cabezera.ContainsKey(b))
-                {
-                    List<bool> cn =cabezera[b];
+                {                    
+                    List<int> cn =cabezera[b];
                     for(int i=0;i<cn.Count;i++)
                     {
-                        if (buffer.Length== 8)
-                        {
-
-                           
-                            // aqui declarar un entero y llamar al método a crear y el entero copiarlo al texto
-                            buffer= "";
+                        if (buffer.Length == 8)
+                        {                           
+                            // aqui declarar un entero y llamar al método a crear y el entero copiarlo al texto                          
+                            texto += binarioADecimal(buffer);
+                            buffer= "";            
                         }
-                        buffer += cn[i];
+                        buffer += cn[i];                        
                     }
                     //Si salimos del bucle y el buffer es menor que 8 añadir 0 delante para que sean ocho bits
+                    if (buffer.Length < 8)
+                    {
+                        for (int i = 0; i < buffer.Length; i++)
+                            aux += "0";
+
+                        texto += binarioADecimal(aux+buffer);
+                        buffer = "";
+                    }
                 }
             }
+            //MessageBox.Show(texto);
             return texto;
         }
 
 
-        public void Darcodigo(Nodo raiz, List<bool> codigo)
+        public void darCodigo(Nodo raiz, List<int> codigo)
         {
-            if (raiz.EsHoja())
+            if (raiz.esHoja())
             {
 
                 cabezera.Add(raiz.Simbolo, codigo);
@@ -105,41 +116,82 @@ namespace PrácticaTIC
             {
                 if (raiz.Hijoiz != null)
                 {
-                    List<bool> iz = new List<bool>();
+                    List<int> iz = new List<int>();
                     iz.AddRange(codigo);
-                    iz.Add(false);
-                    Darcodigo(raiz.Hijoiz,iz);
+                    iz.Add(0);
+                    darCodigo(raiz.Hijoiz,iz);
                 }
                 if (raiz.Hijoder != null)
                 {
-                    List<bool> de = new List<bool>();
+                    List<int> de = new List<int>();
                     de.AddRange(codigo);
-                    de.Add(true);
-                    Darcodigo(raiz.Hijoder, de);
+                    de.Add(1);
+                    darCodigo(raiz.Hijoder, de);
                 }
             }
 
         }
-        public String copiarcod(List<byte> contenido)
+        public String copiarCodigo(List<byte> contenido)
         {
             String cab = "";
-            cons_Arbol(contenido);
-            Darcodigo(raiz,new List<bool>());
+            crearArbol(contenido);
+            darCodigo(raiz,new List<int>());
             
-           foreach (KeyValuePair<byte, List<bool>> simbolos in cabezera)
-            {
+           foreach (KeyValuePair<byte, List<int>> simbolos in cabezera)
+           {
                 cab +=Convert.ToChar(simbolos.Key)+ ":";
                 for (int i = 0; i < simbolos.Value.Count; i++)
                 {
-                    cab += (simbolos.Value[i]? 1 : 0) + "";
+                    cab += simbolos.Value[i] + "";
                 }
                 cab += " ";
             }
             cab += '\n';
 
-            cab += Codifica(contenido);
+            cab += codifica(contenido);
             return cab;
             
+        }
+
+        public int binarioADecimal(string entrada)
+        {
+            int dec = 0;
+            int tam = entrada.Length, aux = 0;
+
+            for (int i = 0; i < entrada.Length; i++)
+            {
+                if(entrada[i]=='1')
+                    dec += (int)Math.Pow(2, tam-1);                               
+                tam--;
+            }
+
+            return dec;
+        }
+
+        public string decimalABinario(string entrada)
+        {
+            string bin = "";
+            int dec = int.Parse(entrada);
+            int resto = 0;
+
+            while (dec > 0)
+            {
+                resto = dec % 2;
+                dec /= 2;
+                bin += resto;
+            }
+
+            return invertir(bin);
+        }
+
+        public string invertir(string s)
+        {
+            string inversa = "";
+
+            for (int i = s.Length-1; i >= 0; i--)
+                inversa += s[i];
+
+            return inversa;
         }
     }
 }
