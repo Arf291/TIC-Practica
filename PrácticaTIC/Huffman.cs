@@ -81,25 +81,27 @@ namespace PrácticaTIC
                     List<int> cn =cabezera[b];
                     for(int i=0;i<cn.Count;i++)
                     {
+                        buffer += cn[i];                        
                         if (buffer.Length == 8)
                         {                           
                             // aqui declarar un entero y llamar al método a crear y el entero copiarlo al texto                          
-                            texto += binarioADecimal(buffer);
+                            texto += Convert.ToChar(binarioADecimal(buffer));
                             buffer= "";            
-                        }
-                        buffer += cn[i];                        
-                    }
-                    //Si salimos del bucle y el buffer es menor que 8 añadir 0 delante para que sean ocho bits
-                    if (buffer.Length < 8)
-                    {
-                        for (int i = 0; i < buffer.Length; i++)
-                            aux += "0";
-
-                        texto += binarioADecimal(aux+buffer);
-                        buffer = "";
-                    }
+                        }                        
+                    }                    
                 }
             }
+
+            //Si salimos del bucle y el buffer es menor que 8 añadir 0 delante para que sean ocho bits
+            if (buffer.Length < 8)
+            {
+                for (int i = 0; i < buffer.Length; i++)
+                    aux += "0";
+
+                texto += Convert.ToChar(binarioADecimal(buffer));
+                buffer = "";
+            }
+
             //MessageBox.Show(texto);
             return texto;
         }
@@ -109,7 +111,6 @@ namespace PrácticaTIC
         {
             if (raiz.esHoja())
             {
-
                 cabezera.Add(raiz.Simbolo, codigo);
             }
             else
@@ -139,14 +140,12 @@ namespace PrácticaTIC
             
            foreach (KeyValuePair<byte, List<int>> simbolos in cabezera)
            {
-                cab +=Convert.ToChar(simbolos.Key)+ ":";
-                for (int i = 0; i < simbolos.Value.Count; i++)
-                {
-                    cab += simbolos.Value[i] + "";
-                }
+                cab +=Convert.ToChar(simbolos.Key)+ "-:";
+                cab += aString(simbolos.Value);
+
                 cab += " ";
             }
-            cab += '\n';
+            cab += "\n--content--\n";
 
             cab += codifica(contenido);
             return cab;
@@ -156,7 +155,7 @@ namespace PrácticaTIC
         public int binarioADecimal(string entrada)
         {
             int dec = 0;
-            int tam = entrada.Length, aux = 0;
+            int tam = entrada.Length;
 
             for (int i = 0; i < entrada.Length; i++)
             {
@@ -192,6 +191,42 @@ namespace PrácticaTIC
                 inversa += s[i];
 
             return inversa;
+        }
+
+        public string aString(List<int> lista)
+        {
+            string cad = "";
+
+            foreach(int i in lista)
+            {
+                cad += i;
+            }
+
+            return cad;
+        }
+
+        public void getCabecera(string[] contenido)
+        {
+            string s = "", temp = "";
+            string[] pares;
+
+            for(int i=0; s!="--content--"; i++)
+            {
+                s=contenido[i];
+                pares = s.Split(' ');
+
+                for (int j = 0; j < pares.Count(); j++)
+                {
+                    temp = pares[j];
+                    MessageBox.Show(temp);
+                    /*if (temp[0] == '-')
+                    {
+                        //MessageBox.Show(temp[0]+"");
+                        //temp = " " + temp;
+                        MessageBox.Show(temp[0]+"");
+                    }*/
+                }
+            }
         }
     }
 }

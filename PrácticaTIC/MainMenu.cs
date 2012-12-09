@@ -37,7 +37,7 @@ namespace PrácticaTIC
             {
                 String ext = file.FileName.Split('.')[1];
 
-                if (ext == "rar" || ext == "zip")
+                if (ext == "rar" || ext == "zip" || ext=="huf")
                 {
                     btAction.Text = "Descomprimir";
                     tsAction.Text = "Descomprimir";
@@ -68,24 +68,31 @@ namespace PrácticaTIC
         }
 
         private void btAction_Click(object sender, EventArgs e)
-        {
+        {            
+            if (btAction.Text == "Comprimir")
+            {
+                List<byte> bytes = new List<byte>();
+                bytes.AddRange(File.ReadAllBytes(file.FileName));
+                Huffman huffman = new Huffman();
+                string textocod = huffman.copiarCodigo(bytes);
 
-            List<byte> bytes = new List<byte>();
-            bytes.AddRange(File.ReadAllBytes(file.FileName));
-            Huffman huffman = new Huffman();
-            string textocod = huffman.copiarCodigo(bytes);
-            
-            string[] split = file.FileName.Split('\\');
-            string nombre=split[split.Length-1].Split('.')[0]+".huf";
-            string ruta="";
+                string[] split = file.FileName.Split('\\');
+                string nombre = split[split.Length - 1].Split('.')[0] + ".huf";
+                string ruta = "";
 
 
-            for(int i=0; i<split.Count()-1; i++)
-            {               
-                ruta+=split[i];
-                ruta += "\\";
+                for (int i = 0; i < split.Count() - 1; i++)
+                {
+                    ruta += split[i];
+                    ruta += "\\";
+                }
+                System.IO.File.WriteAllText(ruta + nombre, textocod);
             }
-            System.IO.File.WriteAllText(ruta+nombre, textocod);
+            else
+            {             
+                Huffman huffman = new Huffman();            
+                huffman.getCabecera(File.ReadAllLines(file.FileName));
+            }            
         }
     }
 }
