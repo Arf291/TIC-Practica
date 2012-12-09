@@ -12,7 +12,7 @@ namespace PrácticaTIC
     {
         public Dictionary<byte,int> frecuencias=new Dictionary<byte,int>();
         public List<Nodo> nodos = new List<Nodo>();
-        public Dictionary<byte, List<int>> cabezera = new Dictionary<byte, List<int>>();
+        public Dictionary<byte, List<int>> cabecera = new Dictionary<byte, List<int>>();
         public Nodo raiz;
 
         public void darFrecuencias(List<byte> input)
@@ -67,7 +67,7 @@ namespace PrácticaTIC
 
         }
 
-        //Codificar y descodificar
+        //Codificar
         public String codifica(List<byte> contenido)
         {
             String texto = "";
@@ -76,15 +76,14 @@ namespace PrácticaTIC
                                    
             foreach (byte b in contenido)
             {
-                if (cabezera.ContainsKey(b))
+                if (cabecera.ContainsKey(b))
                 {                    
-                    List<int> cn =cabezera[b];
+                    List<int> cn =cabecera[b];
                     for(int i=0;i<cn.Count;i++)
                     {
                         buffer += cn[i];                        
                         if (buffer.Length == 8)
-                        {                           
-                            // aqui declarar un entero y llamar al método a crear y el entero copiarlo al texto                          
+                        {                                       
                             texto += Convert.ToChar(binarioADecimal(buffer));
                             buffer= "";            
                         }                        
@@ -92,13 +91,12 @@ namespace PrácticaTIC
                 }
             }
 
-            //Si salimos del bucle y el buffer es menor que 8 añadir 0 delante para que sean ocho bits
             if (buffer.Length < 8)
             {
-                for (int i = 0; i < buffer.Length; i++)
+                for (int i = 0; i < (8-buffer.Length); i++)
                     aux += "0";
 
-                texto += Convert.ToChar(binarioADecimal(buffer));
+                texto += Convert.ToChar(binarioADecimal(aux+buffer));
                 buffer = "";
             }
 
@@ -111,7 +109,7 @@ namespace PrácticaTIC
         {
             if (raiz.esHoja())
             {
-                cabezera.Add(raiz.Simbolo, codigo);
+                cabecera.Add(raiz.Simbolo, codigo);
             }
             else
             {
@@ -138,10 +136,10 @@ namespace PrácticaTIC
             crearArbol(contenido);
             darCodigo(raiz,new List<int>());
             
-           foreach (KeyValuePair<byte, List<int>> simbolos in cabezera)
+           foreach (KeyValuePair<byte, List<int>> simbolos in cabecera)
            {
                 cab +=Convert.ToChar(simbolos.Key)+ "-:";
-                cab += aString(simbolos.Value);
+                cab += listaAString(simbolos.Value);
 
                 cab += " ";
             }
@@ -193,7 +191,7 @@ namespace PrácticaTIC
             return inversa;
         }
 
-        public string aString(List<int> lista)
+        public string listaAString(List<int> lista)
         {
             string cad = "";
 
@@ -205,28 +203,79 @@ namespace PrácticaTIC
             return cad;
         }
 
-        public void getCabecera(string[] contenido)
+        public List<int> stringALista(string s)
         {
-            string s = "", temp = "";
-            string[] pares;
+            List<int> lista=new List<int>();
 
-            for(int i=0; s!="--content--"; i++)
+            foreach(char c in s)
             {
-                s=contenido[i];
+                lista.Add(int.Parse(c.ToString()));
+            }
+
+            return lista;
+        }
+
+        public int getCabecera(string[] contenido)
+        {
+            string s = contenido[0], temp = "";
+            string[] pares;
+            string simbolo, codigo;
+            int i = 0;
+
+            for(i=1; s!="--content--"; i++)
+            {                
                 pares = s.Split(' ');
 
                 for (int j = 0; j < pares.Count(); j++)
                 {
                     temp = pares[j];
-                    MessageBox.Show(temp);
-                    /*if (temp[0] == '-')
+
+                    if (temp != "" && temp != null)
                     {
-                        //MessageBox.Show(temp[0]+"");
-                        //temp = " " + temp;
-                        MessageBox.Show(temp[0]+"");
-                    }*/
+                        if (temp[0] == '-' && temp[1] == ':')
+                            simbolo = " ";
+                        else
+                            simbolo = temp.Split('-')[0];
+
+                        codigo = temp.Split(':')[1];                        
+
+                        cabecera.Add(Convert.ToByte(simbolo[0]), stringALista(codigo));
+                    }
+                }
+                s = contenido[i];
+            }
+            return i;
+        }
+
+        public string descodificar(string[] contenido, int indice)
+        {
+            string texto = "";
+            string codigos = "";
+            string temp="";
+
+            for (int i = indice; i < contenido.Count(); i++)
+            {
+                foreach (char c in contenido[i])
+                {                                        
+                    codigos += decimalABinario(Convert.ToByte(c).ToString());
                 }
             }
+            
+            for (int i = 0; i < codigos.Length; i ++)
+            {
+                temp+=codigos[i];
+
+                foreach (KeyValuePair<byte, List<int>> simbolo in cabecera)
+                {                    
+                    if (listaAString(simbolo.Value) == temp)
+                    {
+                        texto += Convert.ToChar(simbolo.Key);
+                        temp = "";
+                        break;
+                    }
+                }
+            }
+            return texto;
         }
     }
 }

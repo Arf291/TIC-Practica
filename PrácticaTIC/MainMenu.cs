@@ -71,8 +71,7 @@ namespace PrácticaTIC
         {            
             if (btAction.Text == "Comprimir")
             {
-                List<byte> bytes = new List<byte>();
-                bytes.AddRange(File.ReadAllBytes(file.FileName));
+                List<byte> bytes = File.ReadAllBytes(file.FileName).ToList<byte>();
                 Huffman huffman = new Huffman();
                 string textocod = huffman.copiarCodigo(bytes);
 
@@ -90,8 +89,10 @@ namespace PrácticaTIC
             }
             else
             {             
-                Huffman huffman = new Huffman();            
-                huffman.getCabecera(File.ReadAllLines(file.FileName));
+                Huffman huffman = new Huffman();
+                string[] contenido=File.ReadAllLines(file.FileName);               
+                int indice = huffman.getCabecera(contenido);
+                MessageBox.Show(huffman.descodificar(contenido, indice));
             }            
         }
     }
