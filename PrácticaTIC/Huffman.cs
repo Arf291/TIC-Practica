@@ -135,13 +135,15 @@ namespace PrácticaTIC
             String cab = "";
             crearArbol(contenido);
             darCodigo(raiz,new List<int>());
-            
+            int tam = 0;
            foreach (KeyValuePair<byte, List<int>> simbolos in cabecera)
            {
-                cab +=Convert.ToChar(simbolos.Key)+ "-:";
+                cab +=simbolos.Key+ "-:";
                 cab += listaAString(simbolos.Value);
-
+                tam++;
+               if(tam!=cabecera.Count)
                 cab += " ";
+               
             }
             cab += "\n--content--\n";
 
@@ -229,7 +231,8 @@ namespace PrácticaTIC
                 for (int j = 0; j < pares.Count(); j++)
                 {
                     temp = pares[j];
-
+                   
+                    
                     if (temp != "" && temp != null)
                     {
                         if (temp[0] == '-' && temp[1] == ':')
@@ -237,9 +240,9 @@ namespace PrácticaTIC
                         else
                             simbolo = temp.Split('-')[0];
 
-                        codigo = temp.Split(':')[1];                        
-
-                        cabecera.Add(Convert.ToByte(simbolo[0]), stringALista(codigo));
+                        codigo = temp.Split(':')[1];
+                        
+                         cabecera.Add(Convert.ToByte(simbolo), stringALista(codigo));
                     }
                 }
                 s = contenido[i];

@@ -89,10 +89,20 @@ namespace PrácticaTIC
             }
             else
             {             
+                string[] split = file.FileName.Split('\\');
+                string nombre = split[split.Length - 1].Split('.')[0] + ".trad";
+                string ruta = "";
+                for (int i = 0; i < split.Count() - 1; i++)
+                {
+                    ruta += split[i];
+                    ruta += "\\";
+                }
                 Huffman huffman = new Huffman();
                 string[] contenido=File.ReadAllLines(file.FileName);               
                 int indice = huffman.getCabecera(contenido);
-                MessageBox.Show(huffman.descodificar(contenido, indice));
+
+                string textocod=huffman.descodificar(contenido, indice);
+                System.IO.File.WriteAllText(ruta + nombre, textocod);
             }            
         }
     }
