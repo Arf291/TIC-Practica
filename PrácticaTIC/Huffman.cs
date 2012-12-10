@@ -27,6 +27,7 @@ namespace PrácticaTIC
 
                 frecuencias[input[i]]++;
             }
+            frecuencias.Add(200, 0);
             
         }
 
@@ -64,7 +65,6 @@ namespace PrácticaTIC
                  
              }
              raiz = nodos[0];
-
         }
 
         //Codificar
@@ -77,7 +77,8 @@ namespace PrácticaTIC
             foreach (byte b in contenido)
             {
                 if (cabecera.ContainsKey(b))
-                {                    
+                {
+                  
                     List<int> cn =cabecera[b];
                     for(int i=0;i<cn.Count;i++)
                     {
@@ -85,18 +86,20 @@ namespace PrácticaTIC
                         if (buffer.Length == 8)
                         {                                       
                             texto += Convert.ToChar(binarioADecimal(buffer));
+                
                             buffer= "";            
                         }                        
                     }                    
                 }
             }
-
+            buffer = buffer + Convert.ToChar(200);
             if (buffer.Length < 8)
             {
-                for (int i = 0; i < (8-buffer.Length); i++)
-                    aux += "0";
+               
+                    while (buffer.Length < 8)
+                        buffer += "0";
 
-                texto += Convert.ToChar(binarioADecimal(aux+buffer));
+                texto += Convert.ToChar(binarioADecimal(buffer));
                 buffer = "";
             }
 
@@ -163,7 +166,7 @@ namespace PrácticaTIC
                     dec += (int)Math.Pow(2, tam-1);                               
                 tam--;
             }
-
+           
             return dec;
         }
 
@@ -180,6 +183,10 @@ namespace PrácticaTIC
                 bin += resto;
             }
 
+           
+                while (bin.Length < 8)            
+                    bin += "0";            
+
             return invertir(bin);
         }
 
@@ -187,9 +194,11 @@ namespace PrácticaTIC
         {
             string inversa = "";
 
-            for (int i = s.Length-1; i >= 0; i--)
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
                 inversa += s[i];
-
+            }
+            //MessageBox.Show(inversa);
             return inversa;
         }
 
@@ -213,7 +222,7 @@ namespace PrácticaTIC
             {
                 lista.Add(int.Parse(c.ToString()));
             }
-
+          
             return lista;
         }
 
@@ -231,7 +240,7 @@ namespace PrácticaTIC
                 for (int j = 0; j < pares.Count(); j++)
                 {
                     temp = pares[j];
-                   
+                    
                     
                     if (temp != "" && temp != null)
                     {
@@ -241,7 +250,7 @@ namespace PrácticaTIC
                             simbolo = temp.Split('-')[0];
 
                         codigo = temp.Split(':')[1];
-                        
+                       
                          cabecera.Add(Convert.ToByte(simbolo), stringALista(codigo));
                     }
                 }
@@ -259,7 +268,13 @@ namespace PrácticaTIC
             for (int i = indice; i < contenido.Count(); i++)
             {
                 foreach (char c in contenido[i])
-                {                                        
+                {
+                    if (Convert.ToByte(c) == 200)
+                    {
+                        i = contenido.Count();
+                        break;
+                    }
+                     
                     codigos += decimalABinario(Convert.ToByte(c).ToString());
                 }
             }
@@ -267,9 +282,9 @@ namespace PrácticaTIC
             for (int i = 0; i < codigos.Length; i ++)
             {
                 temp+=codigos[i];
-
+               
                 foreach (KeyValuePair<byte, List<int>> simbolo in cabecera)
-                {                    
+                {
                     if (listaAString(simbolo.Value) == temp)
                     {
                         texto += Convert.ToChar(simbolo.Key);
@@ -277,6 +292,7 @@ namespace PrácticaTIC
                         break;
                     }
                 }
+                
             }
             return texto;
         }
