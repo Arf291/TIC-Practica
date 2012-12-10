@@ -10,9 +10,9 @@ namespace PrácticaTIC
 
     class Huffman
     {
-        public Dictionary<byte,int> frecuencias=new Dictionary<byte,int>();
+        public Dictionary<string,int> frecuencias=new Dictionary<string,int>();
         public List<Nodo> nodos = new List<Nodo>();
-        public Dictionary<byte, List<int>> cabecera = new Dictionary<byte, List<int>>();
+        public Dictionary<string, List<int>> cabecera = new Dictionary<string, List<int>>();
         public Nodo raiz;
 
         public void darFrecuencias(List<byte> input)
@@ -20,14 +20,14 @@ namespace PrácticaTIC
            
             for (int i = 0; i < input.Count; i++)
             {
-                if (!frecuencias.ContainsKey(input[i]))
+                if (!frecuencias.ContainsKey(Convert.ToChar(input[i]).ToString()))
                 {
-                    frecuencias.Add(input[i], 0);
+                    frecuencias.Add(Convert.ToChar(input[i]).ToString(), 0);
                 }
 
-                frecuencias[input[i]]++;
+                frecuencias[Convert.ToChar(input[i]).ToString()]++;
             }
-            frecuencias.Add(200, 0);
+            frecuencias.Add("EOF", 0);
             
         }
 
@@ -36,13 +36,13 @@ namespace PrácticaTIC
         {
             darFrecuencias(input);
             float tam = input.Count;
-            foreach (KeyValuePair<byte, int> simbolo in frecuencias)
+            foreach (KeyValuePair<string, int> simbolo in frecuencias)
             {
                 nodos.Add(new Nodo(simbolo.Key, (simbolo.Value / tam)));
             }
             
             int tami=nodos.Count;
-            //Vamos a organizar y ordenar para combinarlos por sus frecuencias hasta que nos queden dos he ir creando el árbol
+            //Vamos a organizar y ordenar para combinarlos por sus frecuencias hasta que nos queden dos e ir creando el árbol
              while (nodos.Count > 1)
             {
                 //Ordenamos ascendentemente cada vez que añadimos uno nuevo reformulado 
@@ -53,9 +53,9 @@ namespace PrácticaTIC
                     List<Nodo> par = ordenados.Take(2).ToList<Nodo>();
 
                     // Creamos al padre como combinación
-                    Nodo padre = new Nodo(0, par[0].Frecuencia + par[1].Frecuencia);
-                        padre.Hijoiz= par[0];
-                        padre.Hijoder=par[1];
+                    Nodo padre = new Nodo("0", par[0].Frecuencia + par[1].Frecuencia);
+                    padre.Hijoiz= par[0];
+                    padre.Hijoder=par[1];
                    
                     //Borramos de la lista general los dos nodos unidos y añadimos el padre
                     nodos.Remove(par[0]);
@@ -72,38 +72,33 @@ namespace PrácticaTIC
         {
             String texto = "";
             String  buffer="";
-            String aux = "";
                                    
             foreach (byte b in contenido)
             {
-                if (cabecera.ContainsKey(b))
+                if (cabecera.ContainsKey(Convert.ToChar(b).ToString()))
                 {
                   
-                    List<int> cn =cabecera[b];
+                    List<int> cn =cabecera[Convert.ToChar(b).ToString()];
                     for(int i=0;i<cn.Count;i++)
                     {
                         buffer += cn[i];                        
                         if (buffer.Length == 8)
-                        {                                       
-                            texto += Convert.ToChar(binarioADecimal(buffer));
-                
+                        {
+                            //MessageBox.Show(buffer);
+                            texto += Convert.ToChar(binarioADecimal(buffer));                                          
                             buffer= "";            
                         }                        
                     }                    
                 }
-            }
-            buffer = buffer + Convert.ToChar(200);
+            }            
+            buffer += listaAString(cabecera["EOF"]);
+            
             if (buffer.Length < 8)
-            {
-               
-                    while (buffer.Length < 8)
-                        buffer += "0";
-
-                texto += Convert.ToChar(binarioADecimal(buffer));
-                buffer = "";
-            }
-
-            //MessageBox.Show(texto);
+            {               
+                while (buffer.Length < 8)
+                    buffer += "0";               
+            } 
+            texto += Convert.ToChar(binarioADecimal(buffer));            
             return texto;
         }
 
@@ -139,7 +134,7 @@ namespace PrácticaTIC
             crearArbol(contenido);
             darCodigo(raiz,new List<int>());
             int tam = 0;
-           foreach (KeyValuePair<byte, List<int>> simbolos in cabecera)
+           foreach (KeyValuePair<string, List<int>> simbolos in cabecera)
            {
                 cab +=simbolos.Key+ "-:";
                 cab += listaAString(simbolos.Value);
@@ -182,10 +177,9 @@ namespace PrácticaTIC
                 dec /= 2;
                 bin += resto;
             }
-
            
-                while (bin.Length < 8)            
-                    bin += "0";            
+            while (bin.Length < 8)            
+                bin += "0";            
 
             return invertir(bin);
         }
@@ -239,8 +233,7 @@ namespace PrácticaTIC
 
                 for (int j = 0; j < pares.Count(); j++)
                 {
-                    temp = pares[j];
-                    
+                    temp = pares[j];                    
                     
                     if (temp != "" && temp != null)
                     {
@@ -251,7 +244,7 @@ namespace PrácticaTIC
 
                         codigo = temp.Split(':')[1];
                        
-                         cabecera.Add(Convert.ToByte(simbolo), stringALista(codigo));
+                        cabecera.Add(simbolo, stringALista(codigo));
                     }
                 }
                 s = contenido[i];
@@ -264,32 +257,34 @@ namespace PrácticaTIC
             string texto = "";
             string codigos = "";
             string temp="";
+            bool salir = false;
 
             for (int i = indice; i < contenido.Count(); i++)
             {
                 foreach (char c in contenido[i])
                 {
-                    if (Convert.ToByte(c) == 200)
-                    {
-                        i = contenido.Count();
-                        break;
-                    }
-                     
+                    //MessageBox.Show(c+"-"+Convert.ToByte(c)+"");
                     codigos += decimalABinario(Convert.ToByte(c).ToString());
                 }
             }
             
-            for (int i = 0; i < codigos.Length; i ++)
+            for (int i = 0; i < codigos.Length && !salir; i ++)
             {
                 temp+=codigos[i];
                
-                foreach (KeyValuePair<byte, List<int>> simbolo in cabecera)
-                {
+                foreach (KeyValuePair<string, List<int>> simbolo in cabecera)
+                {                    
                     if (listaAString(simbolo.Value) == temp)
                     {
+                        MessageBox.Show(temp);
+                        if (temp == listaAString(cabecera["EOF"]))
+                        {                            
+                            salir = true;
+                            break;
+                        }
+
                         texto += Convert.ToChar(simbolo.Key);
-                        temp = "";
-                        break;
+                        temp = "";                        
                     }
                 }
                 

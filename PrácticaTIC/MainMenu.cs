@@ -33,6 +33,9 @@ namespace PrácticaTIC
 
         private void selectFile()
         {
+            groupBox1.Visible = true;
+            gbAcercaDe.Visible = false;
+
             if (file.ShowDialog() == DialogResult.OK)
             {
                 String ext = file.FileName.Split('.')[1];
@@ -49,7 +52,7 @@ namespace PrácticaTIC
                 }
 
                 String[] path = file.FileName.Split('\\');
-                lbName.Text = "Archivo: " + path[path.Length - 1];
+                lbName.Text = path[path.Length - 1];
                 lbName.Visible = true;
                 btAction.Visible = true;
                 tsAction.Enabled = true;
@@ -68,8 +71,27 @@ namespace PrácticaTIC
         }
 
         private void btAction_Click(object sender, EventArgs e)
-        {            
+        {
             if (btAction.Text == "Comprimir")
+                accion(1);
+            else
+                accion(2);                       
+        }
+
+        private void tsAction_Click(object sender, EventArgs e)
+        {
+            if (btAction.Text == "Comprimir")
+                accion(1);
+            else
+                accion(2);
+        }
+
+        public void accion(int opcion)
+        {
+            groupBox1.Visible = true;
+            gbAcercaDe.Visible = false;
+
+            if (opcion == 1)
             {
                 List<byte> bytes = File.ReadAllBytes(file.FileName).ToList<byte>();
                 Huffman huffman = new Huffman();
@@ -79,7 +101,6 @@ namespace PrácticaTIC
                 string nombre = split[split.Length - 1].Split('.')[0] + ".huf";
                 string ruta = "";
 
-
                 for (int i = 0; i < split.Count() - 1; i++)
                 {
                     ruta += split[i];
@@ -88,7 +109,7 @@ namespace PrácticaTIC
                 System.IO.File.WriteAllText(ruta + nombre, textocod);
             }
             else
-            {             
+            {
                 string[] split = file.FileName.Split('\\');
                 string nombre = split[split.Length - 1].Split('.')[0] + ".trad";
                 string ruta = "";
@@ -98,12 +119,18 @@ namespace PrácticaTIC
                     ruta += "\\";
                 }
                 Huffman huffman = new Huffman();
-                string[] contenido=File.ReadAllLines(file.FileName);               
+                string[] contenido = File.ReadAllLines(file.FileName);
                 int indice = huffman.getCabecera(contenido);
 
-                string textocod=huffman.descodificar(contenido, indice);
+                string textocod = huffman.descodificar(contenido, indice);
                 System.IO.File.WriteAllText(ruta + nombre, textocod);
-            }            
+            }
+        }
+
+        private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            groupBox1.Visible = false;
+            gbAcercaDe.Visible = true;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace PrácticaTIC
 {
     class Nodo
     {
-        private byte simbolo;
+        private string simbolo;
         private float frecuencia;
         private Nodo hijoder;
         private Nodo hijoiz;
@@ -46,7 +46,7 @@ namespace PrácticaTIC
             }
         }
 
-        public Byte Simbolo
+        public string Simbolo
         {
             get 
             {
@@ -57,7 +57,7 @@ namespace PrácticaTIC
                 simbolo = value;
             }
         }
-        public Nodo(byte sim, float fre)
+        public Nodo(string sim, float fre)
         {
             simbolo = sim;
             frecuencia = fre;
