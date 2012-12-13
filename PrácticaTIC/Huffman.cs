@@ -28,6 +28,7 @@ namespace PrácticaTIC
                 frecuencias[Convert.ToChar(input[i]).ToString()]++;
             }
             frecuencias.Add("EOF", 0);
+   
             
         }
 
@@ -76,16 +77,14 @@ namespace PrácticaTIC
             foreach (byte b in contenido)
             {
                 if (cabecera.ContainsKey(Convert.ToChar(b).ToString()))
-                {
-                  
+                {                  
                     List<int> cn =cabecera[Convert.ToChar(b).ToString()];
                     for(int i=0;i<cn.Count;i++)
                     {
                         buffer += cn[i];                        
                         if (buffer.Length == 8)
-                        {
-                            //MessageBox.Show(buffer);
-                            texto += Convert.ToChar(binarioADecimal(buffer));                                          
+                        {                                                        
+                            texto += Convert.ToChar(binarioADecimal(buffer));                            
                             buffer= "";            
                         }                        
                     }                    
@@ -97,8 +96,9 @@ namespace PrácticaTIC
             {               
                 while (buffer.Length < 8)
                     buffer += "0";               
-            } 
-            texto += Convert.ToChar(binarioADecimal(buffer));            
+            }            
+            texto += Convert.ToChar(binarioADecimal(buffer));
+            //MessageBox.Show(texto);
             return texto;
         }
 
@@ -139,11 +139,11 @@ namespace PrácticaTIC
                 cab +=simbolos.Key+ "-:";
                 cab += listaAString(simbolos.Value);
                 tam++;
-               if(tam!=cabecera.Count)
+               
                 cab += " ";
                
             }
-            cab += "\n--content--\n";
+            cab += "\n--c\n";
 
             cab += codifica(contenido);
             return cab;
@@ -220,70 +220,88 @@ namespace PrácticaTIC
             return lista;
         }
 
-        public int getCabecera(string[] contenido)
+        public int getCabecera(List<Byte> contenido)
         {
-            string s = contenido[0], temp = "";
-            string[] pares;
-            string simbolo, codigo;
-            int i = 0;
+            string tem = "";
+            int cont = 0;
+            bool fin = false;
 
-            for(i=1; s!="--content--"; i++)
-            {                
-                pares = s.Split(' ');
-
-                for (int j = 0; j < pares.Count(); j++)
+            while(!fin)
+            {
+                if(contenido[cont]=='-' && contenido[cont+1]==':')
                 {
-                    temp = pares[j];                    
+                    cont=cont+2;
+                    String simbol=tem;
                     
-                    if (temp != "" && temp != null)
+                    tem="";
+                    
+                    while (contenido[cont] != ' ' && contenido[cont] != '\n')
                     {
-                        if (temp[0] == '-' && temp[1] == ':')
-                            simbolo = " ";
-                        else
-                            simbolo = temp.Split('-')[0];
-
-                        codigo = temp.Split(':')[1];
-                       
-                        cabecera.Add(simbolo, stringALista(codigo));
-                    }
+                            tem += Convert.ToChar(contenido[cont]);
+                            cont++;                            
+                    }                   
+                    cabecera.Add(simbol,stringALista(tem));                   
+                    cont++;
+                    tem="";                                       
                 }
-                s = contenido[i];
+                else if (contenido[cont] == '-' && contenido[cont+1] == '-' && contenido[cont + 2] == 'c' && contenido[cont + 3]=='\n' )
+                {
+                    cont = cont + 4;
+                    //MessageBox.Show("Termina");
+                    string aux = "";
+                    for (int i = cont-1; i < contenido.Count(); i++)
+                        aux += contenido[i];
+                    //MessageBox.Show(aux);
+                    fin = true;
+                   
+                }
+                else
+                {
+                    tem += Convert.ToChar(contenido[cont]);                    
+                    cont++;
+                }
+               
             }
-            return i;
-        }
 
-        public string descodificar(string[] contenido, int indice)
+            //MessageBox.Show(cabecera.Count()+"");
+            return cont;
+        }
+        
+        public string descodificar(List<Byte> contenido, int indice)
         {
+
             string texto = "";
             string codigos = "";
             string temp="";
             bool salir = false;
-
+            string aux = "";
+            string ti = "";
             for (int i = indice; i < contenido.Count(); i++)
             {
-                foreach (char c in contenido[i])
-                {
-                    //MessageBox.Show(c+"-"+Convert.ToByte(c)+"");
-                    codigos += decimalABinario(Convert.ToByte(c).ToString());
-                }
+                //MessageBox.Show();
+                aux=decimalABinario(contenido[i].ToString());
+                codigos += aux;                                
             }
-            
+            MessageBox.Show(ti);
             for (int i = 0; i < codigos.Length && !salir; i ++)
             {
+                //MessageBox.Show(codigos[i]+"");
                 temp+=codigos[i];
                
                 foreach (KeyValuePair<string, List<int>> simbolo in cabecera)
                 {                    
                     if (listaAString(simbolo.Value) == temp)
                     {
-                        MessageBox.Show(temp);
+                        //MessageBox.Show(temp);
+
                         if (temp == listaAString(cabecera["EOF"]))
                         {                            
                             salir = true;
                             break;
                         }
 
-                        texto += Convert.ToChar(simbolo.Key);
+                        texto += simbolo.Key;
+                        //MessageBox.Show("Texto: "+texto);
                         temp = "";                        
                     }
                 }
