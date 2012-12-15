@@ -95,25 +95,23 @@ namespace PrácticaTIC
             {
                 List<byte> bytes = File.ReadAllBytes(file.FileName).ToList<byte>();                
                 Huffman huffman = new Huffman();
-                string textocod = huffman.copiarCodigo(bytes);
+                string  textocod = huffman.copiarCodigo(bytes);
                 string[] split = file.FileName.Split('\\');
                 string nombre = split[split.Length - 1].Split('.')[0] + ".huf";
                 string ruta = "";
-
                 for (int i = 0; i < split.Count() - 1; i++)
                 {
                     ruta += split[i];
                     ruta += "\\";
                 }
-                byte[] t=Encoding.ASCII.GetBytes(textocod);
-                foreach (byte element in t)
-                {
-                    MessageBox.Show(element+"");
-                }
-                System.IO.File.WriteAllText(ruta + nombre, textocod);
-
-               
               
+                FileStream f = new FileStream(ruta + nombre, FileMode.Create);
+                foreach(byte b in textocod)
+                {
+                     f.WriteByte(b);
+                }
+
+                f.Close();
             }
             else
             {
@@ -128,9 +126,12 @@ namespace PrácticaTIC
                 Huffman huffman = new Huffman();
                 
                 List<Byte> contenido = File.ReadAllBytes(file.FileName).ToList<byte>();               
+
+
                 int indice = huffman.getCabecera(contenido);
-                
+               
                 string textocod = huffman.descodificar(contenido, indice);
+               
                 System.IO.File.WriteAllText(ruta + nombre, textocod);
             }
         }

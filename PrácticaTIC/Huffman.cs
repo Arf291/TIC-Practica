@@ -4,6 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Windows.Forms;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.IO;
 
 namespace PrácticaTIC
 {
@@ -68,41 +77,6 @@ namespace PrácticaTIC
              raiz = nodos[0];
         }
 
-        //Codificar
-        public String codifica(List<byte> contenido)
-        {
-            String texto = "";
-            String  buffer="";
-                                   
-            foreach (byte b in contenido)
-            {
-                if (cabecera.ContainsKey(Convert.ToChar(b).ToString()))
-                {                  
-                    List<int> cn =cabecera[Convert.ToChar(b).ToString()];
-                    for(int i=0;i<cn.Count;i++)
-                    {
-                        buffer += cn[i];                        
-                        if (buffer.Length == 8)
-                        {                                                        
-                            texto += Convert.ToChar(binarioADecimal(buffer));                            
-                            buffer= "";            
-                        }                        
-                    }                    
-                }
-            }            
-            buffer += listaAString(cabecera["EOF"]);
-            
-            if (buffer.Length < 8)
-            {               
-                while (buffer.Length < 8)
-                    buffer += "0";               
-            }            
-            texto += Convert.ToChar(binarioADecimal(buffer));
-            //MessageBox.Show(texto);
-            return texto;
-        }
-
-
         public void darCodigo(Nodo raiz, List<int> codigo)
         {
             if (raiz.esHoja())
@@ -116,7 +90,7 @@ namespace PrácticaTIC
                     List<int> iz = new List<int>();
                     iz.AddRange(codigo);
                     iz.Add(0);
-                    darCodigo(raiz.Hijoiz,iz);
+                    darCodigo(raiz.Hijoiz, iz);
                 }
                 if (raiz.Hijoder != null)
                 {
@@ -128,7 +102,47 @@ namespace PrácticaTIC
             }
 
         }
-        public String copiarCodigo(List<byte> contenido)
+
+        //Codificar
+        public string codifica(List<byte> contenido)
+        {
+            String texto = "";
+            String  buffer="";
+            byte[] byteSA;
+            List<byte> bytes=new List<byte>();
+            foreach (byte b in contenido)
+            {
+                if (cabecera.ContainsKey(Convert.ToChar(b).ToString()))
+                {                  
+                    List<int> cn =cabecera[Convert.ToChar(b).ToString()];
+                    for(int i=0;i<cn.Count;i++)
+                    {
+                        buffer += cn[i];                        
+                        if (buffer.Length == 8)
+                        {
+
+                            texto+=Convert.ToChar(binarioADecimal(buffer));                        
+                            buffer= "";            
+                        }                        
+                    }                    
+                }
+            }            
+            buffer += listaAString(cabecera["EOF"]);
+            
+            if (buffer.Length < 8)
+            {               
+                while (buffer.Length < 8)
+                    buffer += "0";               
+            }
+            texto+=Convert.ToChar(binarioADecimal(buffer));                        
+            buffer= "";
+            //MessageBox.Show(texto);
+            return texto;
+        }
+
+
+
+        public string  copiarCodigo(List<byte> contenido)
         {
             String cab = "";
             crearArbol(contenido);
@@ -136,7 +150,7 @@ namespace PrácticaTIC
             int tam = 0;
            foreach (KeyValuePair<string, List<int>> simbolos in cabecera)
            {
-                cab +=simbolos.Key+ "-:";
+                cab+=simbolos.Key+"-:";
                 cab += listaAString(simbolos.Value);
                 tam++;
                
@@ -282,7 +296,7 @@ namespace PrácticaTIC
                 aux=decimalABinario(contenido[i].ToString());
                 codigos += aux;                                
             }
-            MessageBox.Show(ti);
+           
             for (int i = 0; i < codigos.Length && !salir; i ++)
             {
                 //MessageBox.Show(codigos[i]+"");
@@ -295,7 +309,8 @@ namespace PrácticaTIC
                         //MessageBox.Show(temp);
 
                         if (temp == listaAString(cabecera["EOF"]))
-                        {                            
+                        {
+                            MessageBox.Show("entro");
                             salir = true;
                             break;
                         }
