@@ -21,8 +21,7 @@ namespace PrácticaTIC
         }
 
         private void btSelec_Click(object sender, EventArgs e)
-        {
-            
+        {            
             selectFile();
         }
 
@@ -38,9 +37,9 @@ namespace PrácticaTIC
 
             if (file.ShowDialog() == DialogResult.OK)
             {
-                String ext = file.FileName.Split('.')[1];
+                String[] ext = file.FileName.Split('.');
 
-                if (ext == "rar" || ext == "zip" || ext=="huf")
+                if (ext[ext.Length-1]=="huf")
                 {
                     btAction.Text = "Descomprimir";
                     tsAction.Text = "Descomprimir";
@@ -90,15 +89,22 @@ namespace PrácticaTIC
         {
             groupBox1.Visible = true;
             gbAcercaDe.Visible = false;
+            //progressBar1.Visible = true;
+            //progressBar1.Value = 1;
+            //progressBar1.Step = 1;
+            lbAction.Visible = true;           
 
             if (opcion == 1)
             {
+                lbAction.Text = "Comprimiendo...";    
                 List<byte> bytes = File.ReadAllBytes(file.FileName).ToList<byte>();                
                 Huffman huffman = new Huffman();
+
                 string  textocod = huffman.copiarCodigo(bytes);
                 string[] split = file.FileName.Split('\\');
-                string nombre = split[split.Length - 1].Split('.')[0] + ".huf";
+                string nombre = split[split.Length - 1].Split('.')[0] + "." + split[split.Length - 1].Split('.')[1] + ".huf";
                 string ruta = "";
+
                 for (int i = 0; i < split.Count() - 1; i++)
                 {
                     ruta += split[i];
@@ -108,16 +114,21 @@ namespace PrácticaTIC
                 FileStream f = new FileStream(ruta + nombre, FileMode.Create);
                 foreach(byte b in textocod)
                 {
-                     f.WriteByte(b);
+                    //progressBar1.Increment(1);
+                    //progressBar1.PerformStep();
+                     f.WriteByte(b);                     
                 }
 
                 f.Close();
+                //progressBar1.Step = 0;
             }
             else
-            {
+            {                
+                lbAction.Text = "Descomprimiendo...";         
                 string[] split = file.FileName.Split('\\');
-                string nombre = split[split.Length - 1].Split('.')[0] + ".trad";
+                string nombre = split[split.Length - 1].Split('.')[0] + "." + split[split.Length - 1].Split('.')[1];
                 string ruta = "";
+
                 for (int i = 0; i < split.Count() - 1; i++)
                 {
                     ruta += split[i];
@@ -134,12 +145,21 @@ namespace PrácticaTIC
                
                 System.IO.File.WriteAllText(ruta + nombre, textocod);
             }
+            lbAction.Visible = false;
+            //progressBar1.Value = 0;
+            //progressBar1.Visible = false;            
         }
 
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             groupBox1.Visible = false;
             gbAcercaDe.Visible = true;
+        }
+
+        private void archivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gbAcercaDe.Visible = false;
+            groupBox1.Visible = true;            
         }
     }
 }

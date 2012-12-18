@@ -116,7 +116,7 @@ namespace PrácticaTIC
                 {                  
                     List<int> cn =cabecera[Convert.ToChar(b).ToString()];
                     for(int i=0;i<cn.Count;i++)
-                    {
+                    {                        
                         buffer += cn[i];                        
                         if (buffer.Length == 8)
                         {
@@ -310,7 +310,7 @@ namespace PrácticaTIC
 
                         if (temp == listaAString(cabecera["EOF"]))
                         {
-                            MessageBox.Show("entro");
+                            //MessageBox.Show("entro");
                             salir = true;
                             break;
                         }
